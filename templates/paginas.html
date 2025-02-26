@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadística Inferencial</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/paginas.css') }}">
+
+</head>
+
+<body>
+    <div class="container">
+        <!-- Panel izquierdo -->
+        <div class="left-panel">
+            <div class="bg-image"></div>
+            <div class="math-overlay"></div>
+            <div class="title-container">
+                <h1 class="title">Consulta<br></h1>
+                <div class="yellow-line"></div>
+
+            </div>
+            <div class="logo-container">
+                <img src="/api/placeholder/150/40" alt="Politécnica del Carchi Logo" class="logo">
+                <span class="institution-name">POLITECNICA DEL CARCHI</span>
+            </div>
+        </div>
+
+        <!-- Panel derecho -->
+        <div class="right-panel">
+            <div class="quote-container">
+                <div class="yellow-bar"></div>
+
+                <div class="input-group">
+                    <label for="media">Media</label>
+                    <input type="text" id="media" name="media" placeholder="Ingrese la media">
+                </div>
+                <div class="input-group">
+                    <label for="limite-superior">Límite Superior</label>
+                    <input type="text" id="limite-superior" name="limite-superior" placeholder="Ingrese el límite superior">
+                </div>
+                <div class="input-group">
+                    <label for="limite-inferior">Límite Inferior</label>
+                    <input type="text" id="limite-inferior" name="limite-inferior" placeholder="Ingrese el límite inferior">
+                </div>
+
+                <!-- Botón COMENZAR -->
+                <button id="start-button">COMENZAR</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    document.getElementById("start-button").addEventListener("click", function() {
+        // Obtener los valores de los inputs
+        const media = document.getElementById("media").value;
+        const limiteSuperior = document.getElementById("limite-superior").value;
+        const limiteInferior = document.getElementById("limite-inferior").value;
+
+        // Validar que los campos no estén vacíos
+        if (!media || !limiteSuperior || !limiteInferior) {
+            alert("Por favor, complete todos los campos.");
+            return;
+        }
+
+        // Crear un objeto con los datos
+        const data = {
+            media: parseFloat(media),
+            limiteSuperior: parseFloat(limiteSuperior),
+            limiteInferior: parseFloat(limiteInferior),
+        };
+
+        // Configurar la solicitud Fetch
+        fetch("http://localhost:5000/api/calcular", {
+                method: "POST", // Método HTTP
+                headers: {
+                    "Content-Type": "application/json", // Tipo de contenido
+                },
+                body: JSON.stringify(data), // Convertir el objeto a JSON
+            })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Error en la respuesta del servidor");
+                }
+                return response.json(); // Convertir la respuesta a JSON
+            })
+            .then((result) => {
+                // Manejar la respuesta del servidor
+                console.log("Respuesta del servidor:", result);
+                alert("Datos enviados correctamente: " + JSON.stringify(result));
+
+                // Redirigir a otra página después de recibir la respuesta
+                window.location.href = "otra-pagina.html";
+            })
+            .catch((error) => {
+                // Manejar errores
+                console.error("Error:", error);
+                alert("Hubo un error al enviar los datos.");
+            });
+    });
+
+    // Animación de fade-out
+    const style = document.createElement("style");
+    style.innerHTML = `
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
+        }
+        to {
+            opacity: 0;
+        }
+    }
+    `;
+    document.head.appendChild(style);
+</script>
+
+</html>

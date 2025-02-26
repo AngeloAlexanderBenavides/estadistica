@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadística Inferencial</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <div class="bg-image"></div>
+            <div class="math-overlay"></div>
+            <div class="title-container">
+                <h1 class="title">Estadística<br>Inferencial</h1>
+                <div class="yellow-line"></div>
+                <button id="start-button">COMENZAR</button>
+            </div>
+            <div class="logo-container">
+                <img src="/api/placeholder/150/40" alt="Politécnica del Carchi Logo" class="logo">
+            </div>
+
+        </div>
+        <div class="right-panel">
+            <div class="quote-container">
+                <div class="yellow-bar"></div>
+                <div class="quote">
+                    Todos nuestros sueños se pueden hacer <span class="highlight">realidad</span> si tenemos el <span class="highlight">coraje</span> de perseguirlos.
+                </div>
+                <div class="author">-Walt Disney</div>
+            </div>
+        </div>
+    </div>
+</body>
+<Script>
+    document.getElementById("start-button").addEventListener("click", function() {
+        // Animación de salida (fade-out)
+        document.querySelector(".container").style.animation = "fadeOut 1s ease-in-out forwards";
+        setTimeout(function() {
+            window.location.href = "{{ url_for('paginas_html') }}"; 
+        }, 1000);
+    });
+
+    // Animación de fade-out
+    const style = document.createElement("style");
+    style.innerHTML = `
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
+        }
+        to {
+            opacity: 0;
+        }
+    }
+    `;
+    document.head.appendChild(style);
+</Script>
+
+</html>

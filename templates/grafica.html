@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráfica de Gauss</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/grafica.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Gráfica de Gauss</h1>
+        <div class="results">
+            <p><strong>Media (X):</strong> <span id="media"></span></p>
+            <p><strong>Media Poblacional (μ):</strong> <span id="mu"></span></p>
+            <p><strong>Desviación Estándar (σ):</strong> <span id="sigma"></span></p>
+            <p><strong>Factor Z:</strong> <span id="z"></span></p>
+        </div>
+        <div class="chart-container">
+            <canvas id="gaussChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        // Obtener los parámetros de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const media = parseFloat(urlParams.get('media'));
+        const mu = parseFloat(urlParams.get('mu'));
+        const sigma = parseFloat(urlParams.get('sigma'));
+        const z = parseFloat(urlParams.get('z'));
+
+        // Mostrar los resultados en la página
+        document.getElementById("media").textContent = media;
+        document.getElementById("mu").textContent = mu;
+        document.getElementById("sigma").textContent = sigma;
+        document.getElementById("z").textContent = z.toFixed(2);
+
+        // Crear la gráfica de Gauss
+        const ctx = document.getElementById('gaussChart').getContext('2d');
+        const gaussChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array.from({ length: 100 }, (_, i) => (i - 50) / 10), // Rango de -5 a 5
+                datasets: [{
+                    label: 'Distribución Normal',
+                    data: Array.from({ length: 100 }, (_, i) => {
+                        const x = (i - 50) / 10;
+                        return Math.exp(-0.5 * Math.pow((x - mu) / sigma, 2)) / (sigma * Math.sqrt(2 * Math.PI));
+                    }),
+                    borderColor: '#ffff00',
+                    borderWidth: 2,
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Valores de X'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Densidad de Probabilidad'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
